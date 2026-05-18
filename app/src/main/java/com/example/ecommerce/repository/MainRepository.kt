@@ -3,6 +3,7 @@ package com.example.ecommerce.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.ecommerce.model.BrandModel
+import com.example.ecommerce.model.ItemModel
 import com.example.ecommerce.model.SliderModel
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -14,10 +15,13 @@ class MainRepository {
 
     private val _brands = MutableLiveData<MutableList<BrandModel>>()
     private val _banners = MutableLiveData<List<SliderModel>>()
+    private val _popular = MutableLiveData<MutableList<ItemModel>>()
 
 
     val brands: LiveData<MutableList<BrandModel>> get() = _brands
     val banners: LiveData<List<SliderModel>> get() = _banners
+
+    val popular: LiveData<MutableList<ItemModel>> get() = _popular
 
 
     fun loadBrands(){
@@ -59,4 +63,24 @@ class MainRepository {
 
         })
     }
+    fun loadPopular(){
+        val ref = firebaseDatabase.getReference("Items")
+        ref.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val list=mutableListOf<ItemModel>()
+                for (child in snapshot.children){
+                    child.getValue(ItemModel::class.java)?.let {
+                        list.add(it)
+                    }
+                }
+                _popular.value = list
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
 }

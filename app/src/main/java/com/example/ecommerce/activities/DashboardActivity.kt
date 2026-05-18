@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.ecommerce.adapters.BrandsAdapter
+import com.example.ecommerce.adapters.PopularAdapter
 import com.example.ecommerce.adapters.SliderAdapter
 import com.example.ecommerce.databinding.ActivityMainBinding
 import com.example.ecommerce.model.SliderModel
@@ -24,6 +25,8 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val brandsAdapter = BrandsAdapter(mutableListOf())
+
+    private val popularAdapter= PopularAdapter(mutableListOf())
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,8 +41,23 @@ class DashboardActivity : AppCompatActivity() {
     private fun initUI() {
         initBrands()
         initBanners()
+        initPopular()
+
     }
 
+    private fun initPopular() {
+        binding.apply {
+            recyclerViewPopular.layoutManager= LinearLayoutManager(this@DashboardActivity)
+            recyclerViewPopular.adapter = popularAdapter
+            progressBarPopular.visibility = View.VISIBLE
+
+            viewModel.popular.observe(this@DashboardActivity){data->
+                popularAdapter.updateDate(data)
+                progressBarPopular.visibility = View.GONE
+            }
+            viewModel.loadPopular()
+        }
+    }
 
 
     private fun initBrands() {
