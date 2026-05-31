@@ -5,4 +5,11 @@
     <string name="welcome_back">Welcome Back</string>
     <string name="what_are_you_looking_for">What are you looking for?</string>
     <string name="recommendation">Recommendation</string>
+    <string name="buy_now">Buy Now</string>
+    <string name="total_price">Total Price</string>
+    <string name="total">Total</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="free_delivery">Free Delivery</string>
+    <string name="total_tax">Total Tax</string>
+    <string name="check_out">Check Out</string>
 </resources>

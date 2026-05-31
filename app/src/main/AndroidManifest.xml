@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".ECommerceApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -11,19 +12,52 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ECommerce">
+
         <activity
             android:name=".activities.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activities.DashboardActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
+
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.CartActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.DetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.OrdersActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.AuthActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.CategoryActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.AddressActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.ConfirmOrderActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

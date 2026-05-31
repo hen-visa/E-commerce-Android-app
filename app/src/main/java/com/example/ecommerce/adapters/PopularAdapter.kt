@@ -5,16 +5,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.request.RequestOptions
+import com.example.ecommerce.R
+import com.example.ecommerce.activities.DetailActivity
 import com.example.ecommerce.databinding.ViewholderPopularBinding
-import com.example.ecommerce.model.ItemModel
+import com.example.ecommerce.model.ItemsModel
 
 class PopularAdapter(
-    private val items: MutableList<ItemModel>
+    private val items: MutableList<ItemsModel>
 ): RecyclerView.Adapter<PopularAdapter.Viewholder>() {
 
-    fun updateDate(newData: List<ItemModel>){
+    fun updateData(newData: List<ItemsModel>) {
         items.clear()
         items.addAll(newData)
         notifyDataSetChanged()
@@ -26,9 +26,9 @@ class PopularAdapter(
     ): Viewholder {
         val binding = ViewholderPopularBinding.inflate(
             LayoutInflater.from(parent.context),
-            parent, false)
+            parent, false
+        )
         return Viewholder(binding)
-
     }
 
     override fun onBindViewHolder(
@@ -41,13 +41,17 @@ class PopularAdapter(
             priceTxt.text = "$${item.price}"
             ratingTxt.text = item.rating.toString()
 
-            Glide.with(holder.itemView.context)
+            // Fix: Use root.context, the correct image URL from item, and target the correct ImageView (pic)
+            Glide.with(root.context)
                 .load(item.picUrl.firstOrNull())
-                .apply ( RequestOptions().transform(CenterCrop()) )
+                .placeholder(R.drawable.grey_bg_10dp)
+                .error(R.drawable.grey_bg_10dp)
                 .into(pic)
 
             root.setOnClickListener {
-
+                val intent = Intent(root.context, DetailActivity::class.java)
+                intent.putExtra("object", item)
+                root.context.startActivity(intent)
             }
         }
     }
