@@ -611,7 +611,7 @@ public class TinyDB {
         }
     }
 
-    /**
+    /** After Fix
      * null keys would corrupt the shared pref file and make them unreadable this is a preventive measure
      *
      * @param value the pref value to check
