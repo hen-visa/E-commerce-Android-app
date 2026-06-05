@@ -20,39 +20,58 @@ class CartFragment : Fragment() {
 
     private var _binding: FragmentCartBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var managmentCart: ManagmentCart
     private var tax: Double = 0.0
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCartBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         super.onViewCreated(view, savedInstanceState)
+
         managmentCart = ManagmentCart(requireContext())
 
         initView()
+        refreshCart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshCart()
+    }
+
+    private fun refreshCart() {
         calculateCart()
         initCartList()
+        updateEmptyState()
     }
 
     private fun initCartList() {
-        binding.viewCart.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.viewCart.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+
         binding.viewCart.adapter = CartAdapter(
             managmentCart.getListCart(),
             requireContext(),
             object : ChangeNumberItemsListener {
                 override fun onChanged() {
-                    calculateCart()
+                    refreshCart()
                 }
             }
         )
-
-        updateEmptyState()
     }
 
     private fun updateEmptyState() {
@@ -67,14 +86,23 @@ class CartFragment : Fragment() {
 
     private fun initView() {
         binding.checkoutBtn.setOnClickListener {
+
             if (managmentCart.getListCart().isEmpty()) {
-                Toast.makeText(requireContext(), "Your cart is empty", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Your cart is empty",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
 
-            val intent = Intent(requireContext(), AddressActivity::class.java).apply {
+            val intent = Intent(
+                requireContext(),
+                AddressActivity::class.java
+            ).apply {
                 putExtra("orderTotal", calculateCartTotal())
             }
+
             startActivity(intent)
         }
     }
@@ -82,16 +110,27 @@ class CartFragment : Fragment() {
     private fun calculateCartTotal(): Double {
         val percentTax = 0.01
         val delivery = 10.0
-        return Math.round((managmentCart.getTotalFee() * (1 + percentTax) + delivery) * 100) / 100.0
+
+        return Math.round(
+            (managmentCart.getTotalFee() * (1 + percentTax) + delivery) * 100
+        ) / 100.0
     }
 
     private fun calculateCart() {
         val percentTax = 0.01
         val delivery = 10.0
 
-        tax = Math.round(managmentCart.getTotalFee() * percentTax * 100) / 100.0
-        val total = Math.round((managmentCart.getTotalFee() + tax + delivery) * 100) / 100.0
-        val itemTotal = Math.round(managmentCart.getTotalFee() * 100) / 100.0
+        tax = Math.round(
+            managmentCart.getTotalFee() * percentTax * 100
+        ) / 100.0
+
+        val total = Math.round(
+            (managmentCart.getTotalFee() + tax + delivery) * 100
+        ) / 100.0
+
+        val itemTotal = Math.round(
+            managmentCart.getTotalFee() * 100
+        ) / 100.0
 
         binding.totalFeeTxt.text = "$$itemTotal"
         binding.taxTxt.text = "$$tax"

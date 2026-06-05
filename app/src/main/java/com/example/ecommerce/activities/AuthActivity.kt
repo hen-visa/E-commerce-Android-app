@@ -18,7 +18,10 @@ class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Skip if already signed in
-        if (auth.currentUser != null) goToDashboard()
+        if (auth.currentUser != null){
+            goToDashboard()
+            return
+        }
 
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
